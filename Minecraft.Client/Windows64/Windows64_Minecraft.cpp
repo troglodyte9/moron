@@ -1656,11 +1656,10 @@ int APIENTRY _tWinMain(_In_ HINSTANCE hInstance,
 	const Win64LaunchOptions launchOptions = ParseLaunchOptions();
 	ApplyScreenMode(launchOptions.screenMode);
 
-	// Ensure uid.dat exists from startup in client mode (before any multiplayer/login path).
-	if (!launchOptions.serverMode)
-	{
-		Win64Xuid::ResolvePersistentXuid();
-	}
+	// Ensure uid.dat exists from startup (client and headless server).
+	// Clients need it for their identity; headless server needs it so any XUID-dependent
+	// code (e.g. fake host, profile stubs) has a valid persistent ID.
+	Win64Xuid::ResolvePersistentXuid();
 
 	// If no username, let's fall back
 	if (g_Win64Username[0] == 0)
